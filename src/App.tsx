@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import Header from './components/Header';
 import { OPERATOR_TOKEN, PLAYER_TOKEN } from './consts/baseUrl';
+import LiveCasinoPage from './pages/LiveCasino';
 import SlotCasinoPage from './pages/SlotCasino';
 import fetchUser from './services/fetchUser';
 type User = {
@@ -26,7 +29,13 @@ function App() {
   if (!user?.successful) return <p>{user?.errorMsg}</p>
 
   return (
-    <SlotCasinoPage />
+    <>
+      <Header balance={user.data.balance} username={user.data.username} />
+      <Routes>
+        <Route path="/" element={<SlotCasinoPage currency={user.data.currency} />} />
+        <Route path="/live" element={<LiveCasinoPage currency={user.data.currency} />} />
+      </Routes>
+    </>
   );
 }
 
